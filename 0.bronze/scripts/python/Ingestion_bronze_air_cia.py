@@ -24,7 +24,7 @@ input_path = dict_data["hdfs_path_input_air_cia"]
 
 # Define file read 
 if len(sys.argv) == 2:
-    input_path = input_path + "/VRA_" + sys.argv[1] + ".json"
+    input_path = input_path + "/ANAC_" + sys.argv[1] + "*.csv"
 else:
     pass
 

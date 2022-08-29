@@ -9,8 +9,15 @@ yesterday = datetime.today() - timedelta(days=1)
 # Format: YYYYM
 year = yesterday.strftime("%Y")
 month = str(int(yesterday.strftime("%m")))
-date_parameter = year + month
+date_parameter_vra = year + month
 
+#--------------------------------------------------------------------------------
+# Create parameter date to run the dag
+yesterday = datetime.today() - timedelta(days=1)
+# Format: YYYYMM
+date_parameter_year_month = yesterday.strftime("%Y%m")
+
+#===============================================================================
 # Define the DAG
 dag = DAG(
     dag_id="orchestrator",
@@ -34,7 +41,7 @@ task_bronze_vra = BashOperator(
     task_id="bronze_vra",
     bash_command=f"sh {path_bronze}executor_bronze_vra.sh",
     # Pass the parameter date to the script
-    env={"date_parameter": date_parameter},
+    env={"date_parameter": date_parameter_vra},
     dag=dag
 )
 
@@ -42,7 +49,7 @@ task_bronze_air_cia = BashOperator(
     tasks_id="bronze_air_cia",
     bash_command=f"sh {path_bronze}executor_bronze_air_cia.sh",
     # Pass the parameter date to the script
-    env={"date_parameter": date_parameter},
+    env={"date_parameter": date_parameter_year_month},
     dag=dag
 )
 
@@ -63,7 +70,7 @@ task_silver_vra = BashOperator(
     task_id="silver_vra",
     bash_command=f"sh {path_silver}executor_silver_vra.sh",
     # Pass the parameter date to the script
-    env={"date_parameter": date_parameter},
+    env={"date_parameter": date_parameter_year_month},
     dag=dag
 )
 
@@ -71,7 +78,7 @@ task_silver_air_cia = BashOperator(
     tasks_id="silver_air_cia",
     bash_command=f"sh {path_silver}executor_silver_air_cia.sh",
     # Pass the parameter date to the script
-    env={"date_parameter": date_parameter},
+    env={"date_parameter": date_parameter_year_month},
     dag=dag
 )
 
